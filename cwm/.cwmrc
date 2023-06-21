@@ -1,0 +1,83 @@
+sticky yes
+fontname "zillabold:pixelsize=16:bold"
+moveamount 4
+borderwidth 2
+command firefox     firefox
+command konsole     konsole
+command spotify     "flatpak run com.spotify.Client"
+command rnote       "flatpak run com.github.flxzt.rnote"
+gap 40 0 0 0
+ignore "polybar"
+
+color activeborder "#C8C093"
+color font "#C8C093"
+color menubg "#1F1F28"
+
+unbind-key all
+bind-key 4-t "konsole"
+bind-key 4-d "dolphin"
+
+bind-key 4-c window-vtile
+bind-key M-Tab window-cycle-ingroup
+bind-key MS-Tab window-rcylce-ingroup
+bind-key 4-q window-close
+bind-key 4-f window-maximize
+bind-key 4S-f window-fullscreen
+bind-key 4-p  "rofi -show drun" 
+bind-key 4S-p "passmenu"
+bind-key 4-s menu-window
+bind-key 4-w menu-exec-wm
+bind-key 4CS-r restart
+bind-key 4-r window-menu-label
+bind-key 4CS-q quit
+
+bind-key 4-h window-move-left-big
+bind-key 4-j window-move-down-big
+bind-key 4-k window-move-up-big
+bind-key 4-l window-move-right-big
+
+bind-key 4-plus window-vmaximize
+bind-key 4-equal window-hmaximize
+
+bind-key 4S-h window-resize-left-big
+bind-key 4S-j window-resize-down-big
+bind-key 4S-k window-resize-up-big
+bind-key 4S-l window-resize-right-big
+
+bind-key 4C-h pointer-move-left-big
+bind-key 4C-j pointer-move-down-big
+bind-key 4C-k pointer-move-up-big
+bind-key 4C-l pointer-move-right-big
+
+bind-key 4-b "firefox"
+
+bind-key 4-1 group-only-1
+bind-key 4-2 group-only-2
+bind-key 4-3 group-only-3
+bind-key 4-4 group-only-4
+bind-key 4-5 group-only-5
+bind-key 4-6 group-only-6
+bind-key 4-7 group-only-7
+bind-key 4-8 group-only-8
+bind-key 4-9 group-only-9
+
+bind-key 4S-1 window-movetogroup-1
+bind-key 4S-2 window-movetogroup-2
+bind-key 4S-3 window-movetogroup-3
+bind-key 4S-4 window-movetogroup-4
+bind-key 4S-5 window-movetogroup-5
+bind-key 4S-6 window-movetogroup-6
+bind-key 4S-7 window-movetogroup-7
+bind-key 4S-8 window-movetogroup-8
+bind-key 4S-9 window-movetogroup-9
+
+bind-key 4-Up window-raise
+bind-key 4-Down window-lower
+
+bind-mouse 4-1 window-move
+bind-mouse 4-3 window-resize
+bind-mouse 4-2 window-lower
+bind-mouse 4-4 window-raise
+bind-mouse 4-5 window-lower
+
+
