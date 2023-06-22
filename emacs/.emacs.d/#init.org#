@@ -280,6 +280,10 @@ here I include some line to make parts of org mode have variable pitch fonts
     (require 'org-roam-protocol))
 
 #+end_src
+here I make org-roam also an agenda
+#+begin_src emacs-lisp
+  
+#+end_src
 ** Misc
 Random things I need to do to use a text editor
 #+begin_src emacs-lisp
