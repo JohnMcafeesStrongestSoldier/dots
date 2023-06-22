@@ -228,11 +228,17 @@ just for any language specific modes
   (use-package haskell-mode)
 #+end_src
 ** Org Mode
+*** org-agenda.
+The wurst thing that i have ever had to set up
+#+begin_src emacs-lisp
+  (setq org-agenda-files '(list "~/org/org-roam/dailies" "~/org/refile"))
+#+end_src
 *** org-modern + templates
 #+begin_src emacs-lisp
   (use-package org-modern
   :hook
   (org-mode . visual-line-mode)
+  (org-mode . org-modern-mode)
     :config (global-org-modern-mode))
   (define-key global-map "\C-cc" 'org-capture)
   (setq org-capture-templates
@@ -264,7 +270,7 @@ here I include some line to make parts of org mode have variable pitch fonts
   (use-package org-roam
     :ensure t
     :custom
-    (org-roam-directory (file-truename "~/org-roam/"))
+    (org-roam-directory (file-truename "~/org/org-roam/"))
     :bind (("C-c n l" . org-roam-buffer-toggle)
 	   ("C-c n f" . org-roam-node-find)
 	   ("C-c n g" . org-roam-graph)
