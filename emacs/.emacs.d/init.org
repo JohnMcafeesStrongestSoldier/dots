@@ -12,6 +12,7 @@ Just goin thru the motions and setting up my packages to work properly
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
 			   ("org" . "https://orgmode.org/elpa/")
 			   ("elpa" . "https://elpa.gnu.org/packages/")))
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
   (package-initialize)
   (unless package-archive-contents
@@ -157,6 +158,10 @@ all misc packages needed for function are installed here
 
   (add-hook 'emacs-startup-hook #'efs/display-startup-time)
 #+end_src
+** Email
+for my email, I plan to use wanderlust
+#+begin_src emacs-lisp
+#+end_src
 * Behavior
 ** Bindings
 #+begin_src emacs-lisp 
@@ -201,7 +206,7 @@ for a time I will be trying lsp mode but may switch to eglot
     :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
 	   (go-mode . lsp)
 	   (haskell-mode . lsp)
-  (python-mode . lsp)
+	   (python-mode . lsp)
 	   ;; if you want which-key integration
 	   (lsp-mode . lsp-enable-which-key-integration))
     :commands lsp)
@@ -216,6 +221,9 @@ for a time I will be trying lsp mode but may switch to eglot
 
   ;; optionally if you want to use debugger
   (use-package dap-mode)
+  (use-package yasnippet
+    :config
+    (yas-global-mode 1))
   ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
 #+end_src
@@ -231,22 +239,16 @@ just for any language specific modes
 *** org-agenda.
 The wurst thing that i have ever had to set up
 #+begin_src emacs-lisp
-  (setq org-agenda-files '(list "~/org/org-roam/dailies" "~/org/refile"))
+  (setq org-agenda-files (list "~/org/org-roam/daily/" "~/org/"))
 #+end_src
 *** org-modern + templates
 #+begin_src emacs-lisp
   (use-package org-modern
-  :hook
-  (org-mode . visual-line-mode)
-  (org-mode . org-modern-mode)
+    :hook
+    (org-mode . visual-line-mode)
+    (org-mode . org-modern-mode)
     :config (global-org-modern-mode))
   (define-key global-map "\C-cc" 'org-capture)
-  (setq org-capture-templates
-	'(("t" "Tasks / Projects") ("tt" "Tasks" entry (file+olp "~/org/capture/Scheduling.org" "tasks") "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
-	  ("tp" "Project Related" entry (file+olp "~/org/capture/Scheduling.org" "Projects") "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
-	  ("j" "Journal Entries")
-	  ("jn" "Notes" entry (file+olp "~/org/capture/Notes.org" "Notes") "* %?\n %T\n %a\n %i")
-	  ("jj" "Journal entry" entry (file+olp "~/org/capture/Journaling.org" "Entries") "* %?\n %T\n %a\n %i")))
 #+end_src
 here I include some line to make parts of org mode have variable pitch fonts
 #+begin_src emacs-lisp
@@ -258,12 +260,18 @@ here I include some line to make parts of org mode have variable pitch fonts
 		  (set-face-attribute face nil :inherit 'fixed-pitch))
 		(list 'org-code
 		      'org-link 
+		      'org-verbatim
 		      'org-block
 		      'org-table
 		      'org-block-begin-line
 		      'org-block-end-line
 		      'org-meta-line
 		      'org-document-info-keyword))))
+#+end_src
+here I include some lines so that my lsp's work in org mode
+#+begin_src emacs-lisp
+    (add-hook 'org-mode
+  (lsp-org))
 #+end_src
 *** org-roam
 #+begin_src emacs-lisp
@@ -277,7 +285,8 @@ here I include some line to make parts of org mode have variable pitch fonts
 	   ("C-c n i" . org-roam-node-insert)
 	   ("C-c n c" . org-roam-capture)
 	   ;; Dailies
-	   ("C-c n j" . org-roam-dailies-capture-today))
+	   ("C-c n j" . org-roam-dailies-capture-today)
+  ("C-c n g t" . org-roam-dailies-goto-today))
     :config
     ;; If you're using a vertical completion framework, you might want a more informative completion interface
     (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
