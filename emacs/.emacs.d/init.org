@@ -268,11 +268,6 @@ here I include some line to make parts of org mode have variable pitch fonts
 		      'org-meta-line
 		      'org-document-info-keyword))))
 #+end_src
-here I include some lines so that my lsp's work in org mode
-#+begin_src emacs-lisp
-    (add-hook 'org-mode
-  (lsp-org))
-#+end_src
 *** org-roam
 #+begin_src emacs-lisp
   (use-package org-roam
