@@ -9,11 +9,7 @@ Just goin thru the motions and setting up my packages to work properly
   ;; Initialize package sources
   (require 'package)
 
-  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			   ("org" . "https://orgmode.org/elpa/")
-			   ("elpa" . "https://elpa.gnu.org/packages/")))
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-
   (package-initialize)
   (unless package-archive-contents
     (package-refresh-contents))
@@ -42,14 +38,13 @@ for my splash screen I use dashboard, and its dependencies
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t)
   (setq dashboard-footer-messages '("The day of the reckoning soon approaches" "==SOOOOOOOOOOT==" "All this designer got me drip drip; straight from the - that part. It's that part \n -Mark Wahlberg" "sudo rm -rf /" "ITS BEOWULF TIME" "FINALLY, THE WULF HAS COME BACK TO THE EMACS DASHBOARD" "No cap fr fr" "Who needs doom when you can spend hours reimplementing everything" "Nuclear war, just a week away, can you beleive it guys?" "Why dont yuo touch som controller?" "RIP G.R.U" "How do I exit emacs" "I <3 Ligatures" "I <3 Jokes" "Braincell" "You thought I was feelin' you? Nah" "I <3 Variable Pitch" "Trepanning is healthy" "I have spent more hours on init.el than I have actually coding" "I only pretend to know how git works" "idk how to code"))
-  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 #+end_src
 *** Modeline
 #+begin_src emacs-lisp
   (use-package doom-modeline
     :ensure t
     :init (doom-modeline-mode 1))
- #+end_src
+#+end_src
 *** Theme
 I personally use the kanagawa theme
 #+begin_src emacs-lisp
@@ -106,10 +101,10 @@ everything to do with fonts will go under here
 #+end_src
 **** My font
 #+begin_src emacs-lisp
-  (set-face-attribute 'default nil :font "JetbrainsMono" :height 100)
+  (set-face-attribute 'default nil :font "JetBrainsMono" :height 120)
 
   ;; Set the fixed pitch face
-  (set-face-attribute 'fixed-pitch nil :font "JetbrainsMono" :height 100)
+  (set-face-attribute 'fixed-pitch nil :font "JetBrainsMono" :height 120)
 
   ;; Set the variable pitch face
   (set-face-attribute 'variable-pitch nil :font "Zilla Slab" :height 130 :weight 'regular) 
@@ -159,19 +154,106 @@ all misc packages needed for function are installed here
   (add-hook 'emacs-startup-hook #'efs/display-startup-time)
 #+end_src
 ** Email
-for my email, I plan to use wanderlust
+for my email, I plan to use wanderlust and am experimenting with mew
+*** Wanderlust
 #+begin_src emacs-lisp
+  
+#+end_src
+*** Mew
+#+begin_src emacs-lisp
+  (use-package mew
+    :config
+    (autoload 'mew "mew" nil t)
+    (autoload 'mew-send "mew" nil t)
+    ;; Optional setup (Read Mail menu):
+    (setq read-mail-command 'mew)
+
+    ;; Optional setup (e.g. C-xm for sending a message):
+    (autoload 'mew-user-agent-compose "mew" nil t)
+    (if (boundp 'mail-user-agent)
+	(setq mail-user-agent 'mew-user-agent))
+    (if (fboundp 'define-mail-user-agent)
+	(define-mail-user-agent
+	  'mew-user-agent
+	  'mew-user-agent-compose
+	  'mew-draft-send-message
+	  'mew-draft-kill
+	  'mew-send-hook))
+    ) 
+
+#+end_src
+** Rainbow Delimiters
+#+begin_src emacs-lisp
+      (use-package rainbow-delimiters
+    :config
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+end_src
 * Behavior
 ** Bindings
 #+begin_src emacs-lisp 
   (define-key global-map "\C-cw" 'variable-pitch-mode)
+  (define-key global-map "\C-ca" 'org-agenda)
 #+end_src
 ** PATH
 This is any modifications I need to make to my path
 #+begin_src emacs-lisp
   ;;(setq exe-path(append exec-path '("/root/go/bin")))
-  (setq exe-path(append exec-path '("/usr/local/texlive/2023/bin/x86_64-linux/")))
+  (add-to-list 'exec-path "/usr/local/texlive/2023/bin/x86_64-linux/")
+  (add-to-list 'exec-path "/home/james/.ghcup/bin/")
+#+end_src
+** IDE Features
+random features that mimic ide's that I will very rarely use
+*** Dired
+I like making dired behave more like a full fledged file manager with a sidebar and everything
+#+begin_src emacs-lisp
+  (use-package dired-sidebar
+    :bind ("C-c n" . dired-sidebar-toggle-sidebar)
+    :config
+    (setq dired-sidebar-subtree-line-prefix "|"))
+  (use-package dired
+    :after evil
+    :ensure nil
+    :config
+    (setq ls-lisp-dirs-first t)
+    (setq dired-ls-F-marks-symlinks t)
+    (evil-define-key 'normal dired-mode-map
+      (kbd "h") 'dired-up-directory
+      (kbd "l") 'dired-find-alternate-file
+      )
+    (evil-define-key 'normal dired-sidebar-mode-map
+      (kbd "h") 'dired-sidebar-up-directory
+      (kbd "l") 'dired-sidebar-find-file))
+  (use-package all-the-icons-dired)
+
+#+end_src
+*** Autocomplete
+I will use autocomplete with company
+#+begin_src emacs-lisp
+    (use-package company
+      :bind
+      (:map company-active-map
+	    ("C-n" . company-select-next)
+	    ("C-p" . company-select-previous))
+      :config
+      ;; Enable company mode in specific programming modes
+      (add-hook 'python-mode-hook 'company-mode)
+      (add-hook 'emacs-lisp-mode-hook 'company-mode)
+    (global-company-mode 1)
+      :init
+      ;; Configure company-backends (backend for specific modes)
+      (setq company-backends
+	    '(company-capf   ; Completion-at-point functions (for language-specific support)
+	      company-dabbrev ; Basic dynamic abbreviation completion
+	      company-files   ; File path completion
+	      )))
+#+end_src
+** Smooth Scrolling
+I will use the sublimity smooth scrolling
+#+begin_src emacs-lisp
+    (use-package sublimity
+      :config
+      (require 'sublimity-scroll)
+  (sublimity-mode 1))
 #+end_src
 ** Evil
 evil mode because sometimes i like to be evil
@@ -183,17 +265,37 @@ evil mode because sometimes i like to be evil
     (setq evil-want-keybinding nil)
     :config
     (evil-mode 1))
+#+end_src
+*** Evil-collection
+The evil collection helps me out by not defaulting to emacs bindings in every other package
+#+begin_src emacs-lisp
   (use-package evil-collection
     :after evil
     :config
-    (evil-collection-init)
-    (evil-define-key 'normal dired-mode-map
-      (kbd "h") 'dired-up-directory
-      (kbd "l") 'dired-find-alternate-file))
+    (evil-collection-init))
   (use-package evil-easymotion
     :config
     (evilem-default-keybindings "SPC"))
 #+end_src
+*** Evil-org
+evil binds for org mode, I mostly just use this for the integration with org agenda
+#+begin_src emacs-lisp
+(use-package evil-org
+  :ensure t
+  :after org
+  :hook (org-mode . (lambda () evil-org-mode))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+#+end_src
+*** Misc Evil things
+Misc evil things, like evil-surround
+#+begin_src emacs-lisp
+  (use-package evil-surround
+    :config
+    (global-evil-surround-mode 1))
+#+end_src
+
 ** Languages
 these are the modifications I make to make languages work properly
 *** LSP support
@@ -208,7 +310,7 @@ for a time I will be trying lsp mode but may switch to eglot
 	   (haskell-mode . lsp)
 	   (python-mode . lsp)
 	   ;; if you want which-key integration
-	   (lsp-mode . lsp-enable-which-key-integration))
+	   /e	   (lsp-mode . lsp-enable-which-key-integration))
     :commands lsp)
 
   ;; optionally
@@ -226,6 +328,25 @@ for a time I will be trying lsp mode but may switch to eglot
     (yas-global-mode 1))
   ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
+#+end_src
+here is my eglot config
+#+begin_src emacs-lisp
+  ;;  (use-package eglot
+  ;;    :ensure t
+  ;;    :config
+  ;;    (add-hook 'haskell-mode-hook 'eglot-ensure)
+  ;;    (add-to-list 'eglot-server-programs 
+  ;;		'(haskell-mode . ("haskell-language-server-wrapper" "--lsp")))
+  ;;    :config
+  ;;    (setq-default eglot-workspace-configuration
+  ;;		  '((haskell
+  ;;		     (plugin
+  ;;		      (stan
+  ;;		       (globalOn . :json-false))))))  ;; disable stan
+  ;;    :custom
+  ;;    (eglot-autoshutdown t)  ;; shutdown language server after closing last file
+  ;;    (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
+  ;;    )
 #+end_src
 *** Lang specific support
 just for any language specific modes
@@ -268,19 +389,23 @@ here I include some line to make parts of org mode have variable pitch fonts
 		      'org-meta-line
 		      'org-document-info-keyword))))
 #+end_src
+My org templates
+#+begin_src emacs-lisp
+  ()
+#+end_src
 *** org-roam
 #+begin_src emacs-lisp
   (use-package org-roam
     :ensure t
     :custom
     (org-roam-directory (file-truename "~/org/org-roam/"))
-    :bind (("C-c n l" . org-roam-buffer-toggle)
-	   ("C-c n f" . org-roam-node-find)
-	   ("C-c n i" . org-roam-node-insert)
-	   ("C-c n c" . org-roam-capture)
+    :bind (("C-c r l" . org-roam-buffer-toggle)
+	   ("C-c r f" . org-roam-node-find)
+	   ("C-c r i" . org-roam-node-insert)
+	   ("C-c r c" . org-roam-capture)
 	   ;; Dailies
-	   ("C-c n j" . org-roam-dailies-capture-today)
-  ("C-c n g t" . org-roam-dailies-goto-today))
+	   ("C-c r j" . org-roam-dailies-capture-today)
+	   ("C-c r g t" . org-roam-dailies-goto-today))
     :config
     ;; If you're using a vertical completion framework, you might want a more informative completion interface
     (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
@@ -289,7 +414,20 @@ here I include some line to make parts of org mode have variable pitch fonts
     (require 'org-roam-protocol))
 
 #+end_src
+*** org-web-tools
+*** org mode tab fixes
+#+begin_src emacs-lisp
+  (setq org-src-preserve-indendation t)
+#+end_src
+#+begin_src emacs-lisp
+  (use-package org-web-tools)
+#+end_src
 ** Misc
+*** Expand Region
+#+begin_src emacs-lisp
+  (use-package expand-region
+    :bind ("C-=" . er/expand-region))
+#+end_src
 Random things I need to do to use a text editor
 #+begin_src emacs-lisp
   ;;backups and autosave
@@ -298,3 +436,16 @@ Random things I need to do to use a text editor
   (electric-pair-mode 1)
   (put 'dired-find-alternate-file 'disabled nil)
 #+end_src
+
+** RSS
+I am using elfeed because rss with gnus is a mess and its even harder to use atom
+#+begin_src emacs-lisp
+  (use-package elfeed
+    :config
+    (setq elfeed-feeds
+	  '(("https://denshi.org/index.xml" tech philosophy)
+	    ("https://lukesmith.xyz/index.xml" tech philosophy))
+	  ))
+#+end_src
+
+
