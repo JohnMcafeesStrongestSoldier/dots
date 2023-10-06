@@ -5,7 +5,7 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "kanagawa",
+      colorscheme = "rose-pine",
     },
   },
   { "ellisonleao/gruvbox.nvim", priority = 1000 },
