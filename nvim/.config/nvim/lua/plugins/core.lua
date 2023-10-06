@@ -1,5 +1,6 @@
 return {
   { "rebelot/kanagawa.nvim" },
+  { "rose-pine/neovim" },
 
   {
     "LazyVim/LazyVim",
