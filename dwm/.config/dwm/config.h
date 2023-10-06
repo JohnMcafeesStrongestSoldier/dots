@@ -17,12 +17,12 @@ static const int showbar            = 1;     /* 0 means no bar */
 static const int topbar             = 1;     /* 0 means bottom bar */
 static const char *fonts[]          = { "jetbrainsmono:size=10" };
 static const char dmenufont[]       = "jetbrainsmono:size=10";
-static const char col_bg[]       = "#1F1F28";
-static const char col_bg_light[]       = "#2A2A37";
-static const char col_fg_dark[]       = "#C8C093";
-static const char col_fg[]       = "#DCD7BA";
-static const char col_hl[]        = "#363646";
-static const char col_border[]		= "#C8C093";
+static const char col_bg[]       = "#232136";
+static const char col_bg_light[]       = "#393552";
+static const char col_fg_dark[]       = "#c4a7e7";
+static const char col_fg[]       = "#e0def4";
+static const char col_hl[]        = "#56526e";
+static const char col_border[]		= "#c4a7e7";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_fg_dark, col_bg, col_bg_light },
