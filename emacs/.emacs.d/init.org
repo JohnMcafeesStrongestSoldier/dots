@@ -37,13 +37,6 @@ Some things just can NOT seem to get onto melpa
 	(eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
 (use-package autothemer :ensure t)
-
-(straight-use-package
- '(rose-pine-emacs
-   :host github
-   :repo "thongpv87/rose-pine-emacs"
-   :branch "master"))
-
 #+end_src
 ** UI
 I will use this area to make my emacs be pretty
@@ -70,12 +63,19 @@ for my splash screen I use dashboard, and its dependencies
     :init (doom-modeline-mode 1))
 #+end_src
 *** Theme
-I personally use the kanagawa theme
+I personally use the kanagawa theme and the rose-pine theme
 #+begin_src emacs-lisp
     (use-package autothemer
       :config
       (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/"))
   (use-package autothemer :ensure t)
+
+(straight-use-package
+ '(rose-pine-emacs
+   :host github
+   :repo "thongpv87/rose-pine-emacs"
+   :branch "master"))
+
 
     (tool-bar-mode -1)
 
@@ -285,9 +285,6 @@ The evil collection helps me out by not defaulting to emacs bindings in every ot
     :after evil
     :config
     (evil-collection-init))
-  (use-package evil-easymotion
-    :config
-    (evilem-default-keybindings "SPC"))
 #+end_src
 *** Evil-org
 evil binds for org mode, I mostly just use this for the integration with org agenda
@@ -321,6 +318,7 @@ for a time I will be trying lsp mode but may switch to eglot
 	   (go-mode . lsp)
 	   (haskell-mode . lsp)
 	   (python-mode . lsp)
+	   (c-mode . lsp)
 	   ;; if you want which-key integration
 	   /e	   (lsp-mode . lsp-enable-which-key-integration))
     :commands lsp)
@@ -341,25 +339,6 @@ for a time I will be trying lsp mode but may switch to eglot
   ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
 #+end_src
-here is my eglot config
-#+begin_src emacs-lisp
-  ;;  (use-package eglot
-  ;;    :ensure t
-  ;;    :config
-  ;;    (add-hook 'haskell-mode-hook 'eglot-ensure)
-  ;;    (add-to-list 'eglot-server-programs 
-  ;;		'(haskell-mode . ("haskell-language-server-wrapper" "--lsp")))
-  ;;    :config
-  ;;    (setq-default eglot-workspace-configuration
-  ;;		  '((haskell
-  ;;		     (plugin
-  ;;		      (stan
-  ;;		       (globalOn . :json-false))))))  ;; disable stan
-  ;;    :custom
-  ;;    (eglot-autoshutdown t)  ;; shutdown language server after closing last file
-  ;;    (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
-  ;;    )
-#+end_src
 *** Lang specific support
 just for any language specific modes
 #+begin_src emacs-lisp
@@ -367,6 +346,15 @@ just for any language specific modes
   (use-package sly)
   (use-package lsp-haskell)
   (use-package haskell-mode)
+#+end_src
+*** Treesitter
+#+begin_src emacs-lisp
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
 #+end_src
 ** Org Mode
 *** org-agenda.
