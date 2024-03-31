@@ -12,6 +12,7 @@ xsetroot -solid '#5A8E3A'
 gentoo-pipewire-launcher &
 feh --randomize --bg-fill ~/Downloads/Backgrounds/Slideshow/
 dunst &
+eww open bar
 
 # remove all existing keybindings
 hc keyunbind --all
@@ -26,6 +27,7 @@ hc keybind $Mod-Shift-r reload
 hc keybind $Mod-q close
 hc keybind $Mod-t spawn bash -c 'alacritty || konsole'
 hc keybind $Mod-b spawn "firefox"
+hc keybind $Mod-e spawn "emacs"
 hc keybind $Mod-Control-b spawn firefox --private
 hc keybind $Mod-Return spawn bash /home/james/.config/herbstluftwm/scripts/scratchpad.sh
 hc keybind XF86AudioRaiseVolume spawn pactl set-sink-volume 0 +5%
@@ -210,9 +212,9 @@ hc unlock
 # hc detect_monitors
 
 # find the panel
-panel=~/.config/herbstluftwm/panel.sh
-[ -x "$panel" ] || panel=/etc/xdg/herbstluftwm/panel.sh
-for monitor in $(hc list_monitors | cut -d: -f1); do
-	# start it on each monitor
-	"$panel" "$monitor" &
-done
+#panel=~/.config/herbstluftwm/panel.sh
+#[ -x "$panel" ] || panel=/etc/xdg/herbstluftwm/panel.sh
+#for monitor in $(hc list_monitors | cut -d: -f1); do
+#	# start it on each monitor
+#	"$panel" "$monitor" &
+#done
