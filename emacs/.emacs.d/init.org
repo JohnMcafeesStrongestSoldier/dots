@@ -58,9 +58,11 @@ for my splash screen I use dashboard, and its dependencies
 #+end_src
 *** Modeline
 #+begin_src emacs-lisp
-  (use-package doom-modeline
-    :ensure t
-    :init (doom-modeline-mode 1))
+    (use-package doom-modeline
+      :ensure t
+      :init (doom-modeline-mode 1)
+  :config
+  )
 #+end_src
 *** Theme
 I personally use the kanagawa theme and the rose-pine theme
@@ -85,41 +87,27 @@ everything to do with fonts will go under here
 **** Ligature
 #+begin_src emacs-lisp
   ;;ligatures
-  (use-package ligature
-    :load-path "path-to-ligature-repo"
-    :config
-    ;; Enable the "www" ligature in every possible major mode
-    (ligature-set-ligatures 't '("www"))
-    ;; Enable traditional ligature support in eww-mode, if the
-    ;; `variable-pitch' face supports it
-    (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-    ;; Enable all Cascadia Code ligatures in programming modes
-    (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
-					 ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
-					 "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
-					 "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
-					 "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
-					 "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
-					 "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
-					 "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
-					 ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
-					 "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
-					 "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
-					 "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-					 "\\\\" "://"))
-    ;; Enables ligature checks globally in all buffers. You can also do it
-    ;; per mode with `ligature-mode'.
-    (global-ligature-mode t))
+(use-package ligature
+  :load-path "path-to-ligature-repo"
+  :config
+  ;; Enable all Iosevka ligatures in programming modes
+  (ligature-set-ligatures 'prog-mode '("<---" "<--"  "<<-" "<-" "->" "-->" "--->" "<->" "<-->" "<--->" "<---->" "<!--"
+                                       "<==" "<===" "<=" "=>" "=>>" "==>" "===>" ">=" "<=>" "<==>" "<===>" "<====>" "<!---"
+                                       "<~~" "<~" "~>" "~~>" "::" ":::" "==" "!=" "===" "!=="
+                                       ":=" ":-" ":+" "<*" "<*>" "*>" "<|" "<|>" "|>" "+:" "-:" "=:" "<******>" "++" "+++"))
+  ;; Enables ligature checks globally in all buffers. You can also do it
+  ;; per mode with `ligature-mode'.
+  (global-ligature-mode t))
 #+end_src
 **** My font
 #+begin_src emacs-lisp
-  (set-face-attribute 'default nil :font "JetBrainsMono" :height 120)
+  (set-face-attribute 'default nil :font "iosevka curly slab" :height 120)
 
   ;; Set the fixed pitch face
-  (set-face-attribute 'fixed-pitch nil :font "JetBrainsMono" :height 120)
+  (set-face-attribute 'fixed-pitch nil :font "iosevka curly slab" :height 120)
 
   ;; Set the variable pitch face
-  (set-face-attribute 'variable-pitch nil :font "Zilla Slab" :height 130 :weight 'regular) 
+  (set-face-attribute 'variable-pitch nil :font "iosevka etoile" :height 130 :weight 'regular) 
 #+end_src
 
 *** Git gutters
@@ -235,23 +223,23 @@ I like making dired behave more like a full fledged file manager with a sidebar 
 *** Autocomplete
 I will use autocomplete with company
 #+begin_src emacs-lisp
-    (use-package company
-      :bind
-      (:map company-active-map
-	    ("C-n" . company-select-next)
-	    ("C-p" . company-select-previous))
-      :config
-      ;; Enable company mode in specific programming modes
-      (add-hook 'python-mode-hook 'company-mode)
-      (add-hook 'emacs-lisp-mode-hook 'company-mode)
-    (global-company-mode 1)
-      :init
-      ;; Configure company-backends (backend for specific modes)
-      (setq company-backends
-	    '(company-capf   ; Completion-at-point functions (for language-specific support)
-	      company-dabbrev ; Basic dynamic abbreviation completion
-	      company-files   ; File path completion
-	      )))
+  (use-package company
+    :bind
+    (:map company-active-map
+	  ("C-n" . company-select-next)
+	  ("C-p" . company-select-previous))
+    :config
+    ;; Enable company mode in specific programming modes
+    (add-hook 'python-mode-hook 'company-mode)
+    (add-hook 'emacs-lisp-mode-hook 'company-mode)
+  (global-company-mode 1)
+    :init
+    ;; Configure company-backends (backend for specific modes)
+    (setq company-backends
+	  '(company-capf   ; Completion-at-point functions (for language-specific support)
+	    company-dabbrev ; Basic dynamic abbreviation completion
+	    company-files   ; File path completion
+	    )))
 #+end_src
 *** Rainbow Delimiters
 #+begin_src emacs-lisp
