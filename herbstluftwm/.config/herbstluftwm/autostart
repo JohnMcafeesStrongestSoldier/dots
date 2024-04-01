@@ -131,19 +131,19 @@ hc keybind $Mod-i jumpto urgent
 # theme
 hc attr theme.tiling.reset 1
 hc attr theme.floating.reset 1
-hc set frame_border_active_color '#222222'
-hc set frame_border_normal_color '#101010'
+hc set frame_border_active_color '#223249'
+hc set frame_border_normal_color '#16161D'
 hc set frame_bg_normal_color '#565656'
-hc set frame_bg_active_color '#345F0C'
-hc set frame_border_width 0
+hc set frame_bg_active_color '#2D4F67'
+hc set frame_border_width 1
 hc set show_frame_decorations 'focused_if_multiple'
 hc set frame_bg_transparent on
 hc set frame_transparent_width 5
-hc set frame_gap 4
+hc set frame_gap 0
 
 hc attr theme.minimal.title_height 15
 hc attr theme.minimal.title_when multiple_tabs
-hc attr theme.minimal.title_font 'Dejavu Sans:pixelsize=12' # example using Xft
+hc attr theme.minimal.title_font 'iosevka slab:pixelsize=12' # example using Xft
 # hc attr the.minimalme.title_font '-*-fixed-medium-r-*-*-13-*-*-*-*-*-*-*'
 hc attr theme.minimal.title_depth 3 # space below the title's baseline
 hc attr theme.minimal.active.color '#16161D'
@@ -151,7 +151,7 @@ hc attr theme.minimal.title_color '#C8C093'
 
 hc attr theme.title_height 15
 hc attr theme.title_when multiple_tabs
-hc attr theme.title_font 'Dejavu Sans:pixelsize=12' # example using Xft
+hc attr theme.title_font 'iosevka slab:pixelsize=12' # example using Xft
 # hc attr theme.title_font '-*-fixed-medium-r-*-*-13-*-*-*-*-*-*-*'
 hc attr theme.title_depth 3 # space below the title's baseline
 hc attr theme.active.color '#16161D'
@@ -159,8 +159,8 @@ hc attr theme.title_color '#C8C093'
 hc attr theme.normal.color '#1F1F28'
 hc attr theme.urgent.color '#E82424'
 hc attr theme.tab_color '#1F1F1Fdd'
-hc attr theme.active.tab_color '#2B4F0Add'
-hc attr theme.active.tab_outer_color '#6C8257dd'
+hc attr theme.active.tab_color '#223249dd'
+hc attr theme.active.tab_outer_color '#1F1F28dd'
 hc attr theme.active.tab_title_color '#ababab'
 hc attr theme.normal.title_color '#898989'
 hc attr theme.inner_width 1
@@ -169,9 +169,9 @@ hc attr theme.border_width 1
 hc attr theme.floating.border_width 1
 hc attr theme.floating.outer_width 1
 hc attr theme.floating.outer_color black
-hc attr theme.active.inner_color '#c4a7e7'
-hc attr theme.urgent.inner_color '#9A65B0'
-hc attr theme.normal.inner_color '#6e6a86'
+hc attr theme.active.inner_color '#C8C093'
+hc attr theme.urgent.inner_color '#FF9E3B'
+hc attr theme.normal.inner_color '#1F1F28'
 # copy inner color to outer_color
 for state in active urgent normal; do
 	hc substitute C theme.${state}.inner_color \

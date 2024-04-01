@@ -220,6 +220,11 @@ I like making dired behave more like a full fledged file manager with a sidebar 
   (use-package all-the-icons-dired)
 
 #+end_src
+*** Rainbow Mode
+#+begin_src emacs-lisp
+    (use-package rainbow-mode
+  :hook prog-mode)
+#+end_src
 *** Autocomplete
 I will use autocomplete with company
 #+begin_src emacs-lisp
@@ -332,7 +337,6 @@ just for any language specific modes
 #+begin_src emacs-lisp
   (use-package go-mode)
   (use-package sly)
-  (use-package lsp-haskell)
   (use-package haskell-mode)
 #+end_src
 *** Treesitter
