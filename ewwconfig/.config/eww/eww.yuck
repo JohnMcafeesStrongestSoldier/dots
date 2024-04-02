@@ -6,7 +6,7 @@
 			       :width "100%"
 			       :anchor "top center")
 	   :stacking "fg"
-	   :reserve (struts :distance "10px" :side "top")
+	   :reserve (struts :distance "15px" :side "top")
 	   :windowtype "dock"
 	   :wm-ignore false
 	   (bar))
