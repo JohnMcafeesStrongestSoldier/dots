@@ -12,7 +12,8 @@ xsetroot -solid '#5A8E3A'
 gentoo-pipewire-launcher &
 feh --randomize --bg-fill ~/Downloads/Backgrounds/Slideshow/
 dunst &
-eww open bar
+syncthing serve &
+eww open bar &
 
 # remove all existing keybindings
 hc keyunbind --all

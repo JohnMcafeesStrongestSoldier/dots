@@ -24,7 +24,7 @@ Just goin thru the motions and setting up my packages to work properly
 ** Straight.el Preamble
 Some things just can NOT seem to get onto melpa
 #+begin_src emacs-lisp
-    (defvar bootstrap-version)
+  (defvar bootstrap-version)
   (let ((bootstrap-file
 	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
 	(bootstrap-version 6))
@@ -36,7 +36,7 @@ Some things just can NOT seem to get onto melpa
 	(goto-char (point-max))
 	(eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
-(use-package autothemer :ensure t)
+  (use-package autothemer :ensure t)
 #+end_src
 ** UI
 I will use this area to make my emacs be pretty
@@ -56,30 +56,35 @@ for my splash screen I use dashboard, and its dependencies
   (setq dashboard-set-file-icons t)
   (setq dashboard-footer-messages '("The day of the reckoning soon approaches" "==SOOOOOOOOOOT==" "All this designer got me drip drip; straight from the - that part. It's that part \n -Mark Wahlberg" "sudo rm -rf /" "ITS BEOWULF TIME" "FINALLY, THE WULF HAS COME BACK TO THE EMACS DASHBOARD" "No cap fr fr" "Who needs doom when you can spend hours reimplementing everything" "Nuclear war, just a week away, can you beleive it guys?" "Why dont yuo touch som controller?" "RIP G.R.U" "How do I exit emacs" "I <3 Ligatures" "I <3 Jokes" "Braincell" "You thought I was feelin' you? Nah" "I <3 Variable Pitch" "Trepanning is healthy" "I have spent more hours on init.el than I have actually coding" "I only pretend to know how git works" "idk how to code"))
 #+end_src
+*** Bell
+Turn off that annoying ass bell noise by turning on visible bell
+#+begin_src emacs-lisp
+  (setq visible-bell t)
+#+end_src
 *** Modeline
 #+begin_src emacs-lisp
-    (use-package doom-modeline
-      :ensure t
-      :init (doom-modeline-mode 1)
-  :config
-  )
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1)
+    :config
+    )
 #+end_src
 *** Theme
 I personally use the kanagawa theme and the rose-pine theme
 #+begin_src emacs-lisp
-    (use-package autothemer
-      :config
-      (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/"))
+  (use-package autothemer
+    :config
+    (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/"))
   (use-package autothemer :ensure t)
 
-(straight-use-package
- '(rose-pine-emacs
-   :host github
-   :repo "thongpv87/rose-pine-emacs"
-   :branch "master"))
+  (straight-use-package
+   '(rose-pine-emacs
+     :host github
+     :repo "thongpv87/rose-pine-emacs"
+     :branch "master"))
 
 
-    (tool-bar-mode -1)
+  (tool-bar-mode -1)
 
 #+end_src
 *** Fonts
@@ -87,17 +92,17 @@ everything to do with fonts will go under here
 **** Ligature
 #+begin_src emacs-lisp
   ;;ligatures
-(use-package ligature
-  :load-path "path-to-ligature-repo"
-  :config
-  ;; Enable all Iosevka ligatures in programming modes
-  (ligature-set-ligatures 'prog-mode '("<---" "<--"  "<<-" "<-" "->" "-->" "--->" "<->" "<-->" "<--->" "<---->" "<!--"
-                                       "<==" "<===" "<=" "=>" "=>>" "==>" "===>" ">=" "<=>" "<==>" "<===>" "<====>" "<!---"
-                                       "<~~" "<~" "~>" "~~>" "::" ":::" "==" "!=" "===" "!=="
-                                       ":=" ":-" ":+" "<*" "<*>" "*>" "<|" "<|>" "|>" "+:" "-:" "=:" "<******>" "++" "+++"))
-  ;; Enables ligature checks globally in all buffers. You can also do it
-  ;; per mode with `ligature-mode'.
-  (global-ligature-mode t))
+  (use-package ligature
+    :load-path "path-to-ligature-repo"
+    :config
+    ;; Enable all Iosevka ligatures in programming modes
+    (ligature-set-ligatures 'prog-mode '("<---" "<--"  "<<-" "<-" "->" "-->" "--->" "<->" "<-->" "<--->" "<---->" "<!--"
+					 "<==" "<===" "<=" "=>" "=>>" "==>" "===>" ">=" "<=>" "<==>" "<===>" "<====>" "<!---"
+					 "<~~" "<~" "~>" "~~>" "::" ":::" "==" "!=" "===" "!=="
+					 ":=" ":-" ":+" "<*" "<*>" "*>" "<|" "<|>" "|>" "+:" "-:" "=:" "<******>" "++" "+++"))
+    ;; Enables ligature checks globally in all buffers. You can also do it
+    ;; per mode with `ligature-mode'.
+    (global-ligature-mode t))
 #+end_src
 **** My font
 #+begin_src emacs-lisp
@@ -139,6 +144,11 @@ all misc packages needed for function are installed here
   (setq custom-file "~/.emacs.d/emacs-custom.el")
   (load custom-file)
 #+end_src
+** Native comp
+I need these settings to activate native comp
+#+begin_src emacs-lisp
+  (setq native-comp-deferred-compilation t)
+#+end_src 
 ** Garbage collection
 #+begin_src emacs-lisp
   ;; The default is 800 kilobytes.  Measured in bytes.
@@ -185,6 +195,7 @@ for my email, I plan to use wanderlust and am experimenting with mew
 * Behavior
 ** Bindings
 #+begin_src emacs-lisp 
+  (define-key global-map "\C-cv" 'calc)
   (define-key global-map "\C-cw" 'variable-pitch-mode)
   (define-key global-map "\C-ca" 'org-agenda)
 #+end_src
@@ -219,11 +230,34 @@ I like making dired behave more like a full fledged file manager with a sidebar 
       (kbd "l") 'dired-sidebar-find-file))
   (use-package all-the-icons-dired)
 
+  (use-package dired-subtree
+    :ensure t
+    :after (dired evil)
+    :config
+    (evil-define-key 'normal dired-mode-map
+      (kbd "TAB") 'dired-subtree-toggle)
+    )
+
+#+end_src
+*** Pop-up terminal
+Shell pop + eat for a pop up terminal CURRENTLY BROKEN
+#+begin_src emacs-lisp
+  (use-package eat)
+  ;;;;(use-package shell-pop
+  ;;  :ensure t
+  ;;  :config
+  ;;  (add-hook 'shell-pop-in-hook (lambda () (push (cons "\\*eat*\\*" display-buffer--same-window-action) display-buffer-alist)))
+  ;;  :custom
+  ;;  (shell-pop-full-span t)
+  ;;  (shell-pop-universal-key "C-c t")
+  ;;  (shell-pop-term-shell "/bin/fish")
+  ;;  ;;(shell-pop-shell-type '("eat" "*eat*" (lambda () (eat shell-pop-term-shell))))
+  ;;  )
 #+end_src
 *** Rainbow Mode
 #+begin_src emacs-lisp
-    (use-package rainbow-mode
-  :hook prog-mode)
+  (use-package rainbow-mode
+    :hook prog-mode)
 #+end_src
 *** Autocomplete
 I will use autocomplete with company
@@ -237,28 +271,31 @@ I will use autocomplete with company
     ;; Enable company mode in specific programming modes
     (add-hook 'python-mode-hook 'company-mode)
     (add-hook 'emacs-lisp-mode-hook 'company-mode)
-  (global-company-mode 1)
+  (global-company-mode)
     :init
     ;; Configure company-backends (backend for specific modes)
     (setq company-backends
 	  '(company-capf   ; Completion-at-point functions (for language-specific support)
 	    company-dabbrev ; Basic dynamic abbreviation completion
 	    company-files   ; File path completion
-	    )))
+	    ))
+    :hook (prog-mode . company-mode)
+    :after
+    sly)
 #+end_src
 *** Rainbow Delimiters
 #+begin_src emacs-lisp
-      (use-package rainbow-delimiters
+  (use-package rainbow-delimiters
     :config
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+end_src
 ** Smooth Scrolling
 I will use the sublimity smooth scrolling
 #+begin_src emacs-lisp
-    (use-package sublimity
-      :config
-      (require 'sublimity-scroll)
-  (sublimity-mode 1))
+  (use-package sublimity
+    :config
+    (require 'sublimity-scroll)
+    (sublimity-mode 1))
 #+end_src
 ** Evil
 evil mode because sometimes i like to be evil
@@ -282,13 +319,13 @@ The evil collection helps me out by not defaulting to emacs bindings in every ot
 *** Evil-org
 evil binds for org mode, I mostly just use this for the integration with org agenda
 #+begin_src emacs-lisp
-(use-package evil-org
-  :ensure t
-  :after org
-  :hook (org-mode . (lambda () evil-org-mode))
-  :config
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
+  (use-package evil-org
+    :ensure t
+    :after org
+    :hook (org-mode . (lambda () evil-org-mode))
+    :config
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys))
 #+end_src
 *** Misc Evil things
 Misc evil things, like evil-surround
@@ -309,7 +346,7 @@ for a time I will be trying lsp mode but may switch to eglot
     (setq lsp-keymap-prefix "C-c l")
     :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
 	   (go-mode . lsp)
-	   (haskell-mode . lsp)
+	   ;;(haskell-mode . lsp)
 	   (python-mode . lsp)
 	   (c-mode . lsp)
 	   ;; if you want which-key integration
@@ -337,31 +374,52 @@ just for any language specific modes
 #+begin_src emacs-lisp
   (use-package go-mode)
   (use-package sly)
-  (use-package haskell-mode)
+  ;;(use-package haskell-mode)
 #+end_src
 *** Treesitter
 #+begin_src emacs-lisp
-(use-package treesit-auto
-  :custom
-  (treesit-auto-install 'prompt)
-  :config
-  (treesit-auto-add-to-auto-mode-alist 'all)
-  (global-treesit-auto-mode))
+  (use-package treesit-auto
+    :custom
+    (treesit-auto-install 'prompt)
+    :config
+    (treesit-auto-add-to-auto-mode-alist 'all)
+    (global-treesit-auto-mode))
+#+end_src
+*** LISP
+**** Common lisp
+Sly, and whatnot
+#+begin_src emacs-lisp
+  (use-package sly
+    :after
+    evil-collection)
 #+end_src
 ** Org Mode
 *** org-agenda.
 The wurst thing that i have ever had to set up
 #+begin_src emacs-lisp
-  (setq org-agenda-files (list "~/org/org-roam/daily/" "~/org/"))
+  (setq org-agenda-files (list "~/org/"))
 #+end_src
-*** org-modern + templates
+*** templates
+#+begin_src emacs-lisp
+  (define-key global-map "\C-cc" 'org-capture)
+    (setq org-capture-templates '(
+	("t" "Task" entry (file+headline "~/org/notes.org" "Things to get done") "** TODO %?\n %i\n %a\n")
+	("l" "Logging")
+	("lw" "Weight Entry" table-line (file+headline "~/org/notes.org" "Weight" ) "| %u | %^{weight|170lbs} | %^{phase|MainGain|Bulk|Cut} |")
+	("lr" "Run entry" table-line (file+headline "~/org/notes.org" "Runs") "| %u | %^{time} | %^{distance|10km|5km|1km} |")
+	("n" "Notes")
+	("nm" "Misc Notes" entry (file+headline "~/org/notes.org" "Misc") "*** %?\n %i\n %a\n")
+	("r" "Recipe" entry (file+headline "~/org/notes.org" "Recipes") "** %^{recipe-name} %^g \n [[%^{recipe-link}][recipe link]]\n - Ingredients \n  - %? \n- Instructions")
+
+				))
+#+end_src
+*** org-modern
 #+begin_src emacs-lisp
   (use-package org-modern
     :hook
     (org-mode . visual-line-mode)
     (org-mode . org-modern-mode)
     :config (global-org-modern-mode))
-  (define-key global-map "\C-cc" 'org-capture)
 #+end_src
 here I include some line to make parts of org mode have variable pitch fonts
 #+begin_src emacs-lisp
@@ -381,11 +439,8 @@ here I include some line to make parts of org mode have variable pitch fonts
 		      'org-meta-line
 		      'org-document-info-keyword))))
 #+end_src
-My org templates
-#+begin_src emacs-lisp
-  ()
-#+end_src
 *** org-roam
+I used to use org roam but frankly not much anymore
 #+begin_src emacs-lisp
   (use-package org-roam
     :ensure t
@@ -406,13 +461,26 @@ My org templates
     (require 'org-roam-protocol))
 
 #+end_src
-*** org-web-tools
 *** org mode tab fixes
 #+begin_src emacs-lisp
   (setq org-src-preserve-indendation t)
 #+end_src
 #+begin_src emacs-lisp
   (use-package org-web-tools)
+#+end_src
+*** Various small changes to org behavior
+#+begin_src emacs-lisp
+  (setq org-log-done 'time)
+#+end_src
+** Casual
+I probably wont use casual dired because of its difference from evil keybinds
+#+begin_src emacs-lisp
+  (use-package casual
+    :config
+  (define-key calc-mode-map (kbd "C-o") 'casual-main-menu)
+    (evil-define-key 'normal calc-mode-map
+      (kbd "C-o") 'casual-main-menu)
+    )
 #+end_src
 ** Misc
 *** Expand Region
@@ -429,19 +497,26 @@ Random things I need to do to use a text editor
   (put 'dired-find-alternate-file 'disabled nil)
 #+end_src
 
+*** Embark
+#+begin_src emacs-lisp
+      (use-package embark
+  :config
+  :bind
+  (("C-c e" . embark-act)))
+#+end_src
 ** Book Reading
 I sometimes like to do some of my reading in emacs
 #+begin_src emacs-lisp
-		(use-package nov
-	      :config
-	    (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
-      (use-package calibredb
-	:defer t
-	:config
-	(setq calibredb-root-dir "~/Calibre Library")
-	(setq calibredb-db-dir (expand-file-name "metadata.db" calibredb-root-dir)))
-    (use-package olivetti
-  )
+  (use-package nov
+    :config
+    (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
+  (use-package calibredb
+    :defer t
+    :config
+    (setq calibredb-root-dir "~/Calibre Library")
+    (setq calibredb-db-dir (expand-file-name "metadata.db" calibredb-root-dir)))
+  (use-package olivetti
+    )
 #+end_src
 ** RSS
 I am using elfeed because rss with gnus is a mess and its even harder to use atom
