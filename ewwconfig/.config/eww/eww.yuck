@@ -1,3 +1,4 @@
+
 (defwindow bar
 	   :monitor 0
 	   :geometry (geometry :x "0%"
@@ -6,8 +7,10 @@
 			       :width "100%"
 			       :anchor "top center")
 	   :stacking "fg"
-	   :reserve (struts :distance "15px" :side "top")
+	   :reserve (struts :distance "15px" :anchor "top")
 	   :windowtype "dock"
+	   :exclusive true
+	   :namespace "bar"
 	   :wm-ignore false
 	   (bar))
 (defwidget bar []
@@ -37,7 +40,7 @@
 (defwidget leftside []
 	   (box
 	    :orientation "h"
-	   (literal :content workspace)))
+	   (workspaces)))
 
 (defwidget metric [label value onchange]
 	   (box :orientation "h"
@@ -55,4 +58,20 @@
 	 :initial "The End of The World"
 	 "date +'%I:%M %p - %d %B'"
 )
-(deflisten workspace "scripts/workspace.sh")
+(deflisten workspaces :initial "[]" "bash ~/.config/eww/scripts/get-workspaces")
+(deflisten current_workspace :initial "1" "bash ~/.config/eww/scripts/get-active-workspace")
+(defwidget workspaces []
+  (eventbox :onscroll "bash ~/.config/eww/scripts/change-active-workspace {} ${current_workspace}" :class "workspaces-widget"
+	    (box :space-evenly true
+		 :halign "start"
+      (label :text "${workspaces}${current_workspace}" :visible false)
+      (for workspace in workspaces
+        (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
+          (button :class " workspaces ${workspace.windows > 0 ? "occupied" : "empty"} workspace-entry"
+            (label :text "${workspace.id}" :class " ${workspace.windows > 0 ? "occupied" : ""} ${workspace.id == current_workspace ? "active" : ""} workspace-entry " )
+            )
+          )
+        )
+      )
+    )
+  )

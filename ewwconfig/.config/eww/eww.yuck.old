@@ -1,0 +1,58 @@
+(defwindow bar
+	   :monitor 0
+	   :geometry (geometry :x "0%"
+			       :y "0px"
+			       :height "10px"
+			       :width "100%"
+			       :anchor "top center")
+	   :stacking "fg"
+	   :reserve (struts :distance "15px" :side "top")
+	   :windowtype "dock"
+	   :wm-ignore false
+	   (bar))
+(defwidget bar []
+	   (centerbox :orientation "h"
+		      (leftside)
+		      (middle)
+		      (rightside)))
+(defwidget rightside []
+	   (box :orientation "h"
+		:halign "end"
+		:space-evenly false
+		(metric :label "CPU:"
+			:value {EWW_CPU.avg}
+			:onchange "")
+		(metric :label "MEM:"
+			:value {EWW_RAM.used_mem_perc}
+			:onchange "")
+		(metric :label "BAT:"
+			:value {EWW_BATTERY.BAT0.capacity}
+			:onchange "")
+		(systray
+			 :orientation "h"
+			 :icon-size 10)
+		))
+(defwidget middle []
+	    (label :text time))
+(defwidget leftside []
+	   (box
+	    :orientation "h"
+	   (literal :content workspace)))
+
+(defwidget metric [label value onchange]
+	   (box :orientation "h"
+		:class "metric"
+		:space-evenly false
+		(box :class "label" label)
+		(scale :min 0
+		       :max 101
+		       :active {onchange != ""}
+		       :value value
+		       :onchange onchange)))
+
+
+(defpoll time :interval "5s"
+	 :initial "The End of The World"
+	 "date +'%I:%M %p - %d %B'"
+)
+(deflisten workspace "scripts/workspace.sh")

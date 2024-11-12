@@ -78,7 +78,7 @@ hc keybind $Mod-Control-Up resize up +$resizestep
 hc keybind $Mod-Control-Right resize right +$resizestep
 
 #set default layout before tags
-hc set_attr settings.default_frame_layout max
+hc set_attr settings.default_frame_layout horizontal
 hc set_layout max
 # tags
 tag_names=({1..9})

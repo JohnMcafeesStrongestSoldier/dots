@@ -6,6 +6,7 @@
     font-size: 10px;
     font-family: "iosevka";
     background-color: #1F1F28;
+    border-radius: 10px;
 }
 
 .metric scale trough highlight {
@@ -38,14 +39,19 @@
   margin-left: 10px;
   margin-right: 20px;
 }
+systray {
+    margin-left: 10px;
+}
+button.workspace-entry {
+    background-color: #16161D;
+}
 
 .occupied {
     background-color: #363646;
     color: #DCD7BA;
-    
 }
 
-.empty {
+label.empty {
     color: #C8C093;
     background-color: #16161D;
 }
@@ -55,6 +61,8 @@
     color: #16161D;
 }
 
-.workspaces button{
-    padding: 0px 3px;
+label.workspace-entry {
+    padding: 0px 0px;
+    border-radius: 50%;
 }
+

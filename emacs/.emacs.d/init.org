@@ -240,6 +240,15 @@ I like making dired behave more like a full fledged file manager with a sidebar 
     )
 
 #+end_src
+*** Code Folding
+folding stuffs
+#+begin_src emacs-lisp
+      (use-package origami
+      :config
+  (setq origami-fold-replacement "▼")
+    :after evil
+  :hook prog-mode)
+#+end_src
 *** Pop-up terminal
 Shell pop + eat for a pop up terminal CURRENTLY BROKEN
 #+begin_src emacs-lisp
@@ -289,6 +298,10 @@ I will use autocomplete with company
   (use-package rainbow-delimiters
     :config
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+#+end_src
+*** Compile via keybind
+#+begin_src emacs-lisp
+  (global-set-key [f6] 'compile)
 #+end_src
 ** Smooth Scrolling
 I will use the sublimity smooth scrolling
