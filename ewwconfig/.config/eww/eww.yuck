@@ -22,21 +22,20 @@
 	   (box :orientation "h"
 		:halign "end"
 		:space-evenly false
-		(metric :label "CPU:"
-			:value {EWW_CPU.avg}
-			:onchange "")
-		(metric :label "MEM:"
-			:value {EWW_RAM.used_mem_perc}
-			:onchange "")
-		(metric :label "BAT:"
-			:value {EWW_BATTERY.BAT0.capacity}
-			:onchange "")
+		(box :class "info"
+		 (label :text "♪ ${volume}"))
+		(box :class "info"
+		    (label :text "⚡ ${EWW_BATTERY.BAT0.capacity}%"))
+		(box :class "info"
+		    (label :text "💻 ${round(EWW_CPU.avg, 0)}%"))
+		(box :class "info"
+		    (label :text "🧠 ${round(EWW_RAM.used_mem_perc, 0)}%"))
 		(systray
 			 :orientation "h"
 			 :icon-size 10)
 		))
 (defwidget middle []
-	    (label :text time))
+	    (label :class "date" :text time))
 (defwidget leftside []
 	   (box
 	    :orientation "h"
@@ -58,6 +57,7 @@
 	 :initial "The End of The World"
 	 "date +'%I:%M %p - %d %B'"
 )
+(deflisten volume :initial "100%" "bash ~/.config/eww/scripts/volumePerc.sh ")
 (deflisten workspaces :initial "[]" "bash ~/.config/eww/scripts/get-workspaces")
 (deflisten current_workspace :initial "1" "bash ~/.config/eww/scripts/get-active-workspace")
 (defwidget workspaces []
