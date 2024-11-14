@@ -13,15 +13,22 @@
 	   :namespace "bar"
 	   :wm-ignore false
 	   (bar))
+
 (defwidget bar []
 	   (centerbox :orientation "h"
 		      (leftside)
 		      (middle)
 		      (rightside)))
+(defwidget empty []
+  (label :text ""))
+(defwidget windowtitle []
+  (label
+    :text "${windowtitle}"))
 (defwidget rightside []
 	   (box :orientation "h"
 		:halign "end"
 		:space-evenly false
+       (windowtitle)
 		(box :class "info"
 		 (label :text "♪ ${volume}"))
 		(box :class "info"
@@ -57,6 +64,7 @@
 	 :initial "The End of The World"
 	 "date +'%I:%M %p - %d %B'"
 )
+(deflisten windowtitle :initial "title" "sh ~/.config/eww/scripts/get-window-title.sh")
 (deflisten volume :initial "100%" "bash ~/.config/eww/scripts/volumePerc.sh ")
 (deflisten workspaces :initial "[]" "bash ~/.config/eww/scripts/get-workspaces")
 (deflisten current_workspace :initial "1" "bash ~/.config/eww/scripts/get-active-workspace")
