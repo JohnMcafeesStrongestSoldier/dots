@@ -76,12 +76,8 @@ I personally use the kanagawa theme and the rose-pine theme
     :config
     (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/"))
   (use-package autothemer :ensure t)
+  (use-package kanagawa-themes)
 
-  (straight-use-package
-   '(rose-pine-emacs
-     :host github
-     :repo "thongpv87/rose-pine-emacs"
-     :branch "master"))
 
 
   (tool-bar-mode -1)

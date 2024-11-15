@@ -1,0 +1,121 @@
+(defwindow bar
+	   :monitor 0
+	   :geometry (geometry :x "0%"
+			       :y "2px"
+			       :height "100%"
+			       :width "15px"
+			       :anchor "left center")
+	   :stacking "fg"
+	   :reserve (struts :distance "15px" :anchor "top")
+	   :windowtype "dock"
+	   :exclusive true
+	   :namespace "bar"
+	   :wm-ignore false
+	   (bar))
+;(defwindow calender
+;	   :)
+
+(defwidget bar []
+	   (centerbox :orientation "v"
+		      (leftside)
+		      (middle)
+		      (rightside)))
+(defwidget empty []
+	   (label :text ""))
+(defwidget windowtitle []
+	   (label
+	    :gravity "west"
+	    :class "windowtitle"
+	    :text "${windowtitle}"
+	    :width "10px"
+	    :limit-width 5))
+(defwidget rightside []
+	   (box :orientation "v"
+		:valign "end"
+		:space-evenly false
+		(info-box :text "🔊" :percent "${volume}")
+		(info-box :text "💻" :percent "${round(EWW_CPU.avg, 0)}")
+		(info-box :text "⚡" :percent "${EWW_BATTERY.BAT0.capacity}")
+		(info-box :text "🧠" :percent "${round(EWW_RAM.used_mem_perc, 0)}")
+		(box
+		 :class "graph-container"
+		 :orientation "v"
+		 :space-evenly true
+		 (overlay 
+		  (graph :time-range "20s"
+			 :dynamic true
+			 :class "graph"
+			 :height 100 
+			 :width 10 
+			 :max 1000000
+			 :min 0
+			 :thickness 2
+			 :line-style "round"
+			 :value "${EWW_NET.wlo1.NET_DOWN}")
+		  (label :text "${round(EWW_NET.wlo1.NET_DOWN, 0)}")
+		  ))
+		(box
+		 :class "tray-container"
+		 (systray
+		  :orientation "v"
+		  :icon-size 15)
+		 )))
+(defwidget info-box [text percent]
+	   (box :class "info"
+		:orientation "v"
+		(label :class "info-icon" :text "${text}")
+		(label :text "${percent}%")))
+(defwidget middle []
+	   (box
+	    :class "date"
+	    :orientation "v"
+	    (label :class "time" :justify "center" :width "5px" :wrap "true" :text time)
+	    (label :class "daymonth" :justify "center" :width "5px" :limit-width "3" :wrap "true" :text daymonth)))
+(defwidget leftside []
+	   (box
+	    :orientation "v"
+	    :space-evenly false
+	    (workspaces)
+	    ;(windowtitle)
+	    ))
+
+(defwidget metric [label value onchange]
+	   (box :orientation "h"
+		:class "metric"
+		:space-evenly false
+		(box :class "label" label)
+		(scale :min 0
+		       :max 101
+		       :active {onchange != ""}
+		       :value value
+		       :onchange onchange)))
+
+
+(defpoll time :interval "5s"
+	 :initial "The End of The World"
+	 "date +'%I%n%M%n%p'"
+	 )
+(defpoll daymonth :interval "5s"
+	 :initial "The End of The World"
+	 "date +'%d%n%b'")
+(deflisten windowtitle :initial "title" "sh ~/.config/eww/scripts/get-window-title.sh")
+(deflisten volume :initial "50" "bash ~/.config/eww/scripts/volumePerc.sh ")
+(deflisten workspaces :initial "[]" "bash ~/.config/eww/scripts/get-workspaces")
+(deflisten current_workspace :initial "1" "bash ~/.config/eww/scripts/get-active-workspace")
+(defwidget workspaces []
+	   (eventbox :onscroll "bash ~/.config/eww/scripts/change-active-workspace {} ${current_workspace}" :class "workspaces-widget"
+		     (box :space-evenly true
+			  :halign "fill"
+			  :orientation "v"
+			  (label :text "${workspaces}${current_workspace}" :visible false)
+			  (for workspace in workspaces
+			       (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
+					 (box :height 30 :width 30 :class " workspaces ${workspace.windows > 0 ? "occupied" : "empty"} workspace-entry"
+					      (label :valign "center" :halign "center" :height 20 :width 20
+						     :text "${workspace.id}" :class " ${workspace.windows > 0 ? "occupied" : ""} ${workspace.id == current_workspace ? "active" : ""} workspace-entry " )
+						 )
+					 )
+			       )
+			  )
+		     )
+	   )

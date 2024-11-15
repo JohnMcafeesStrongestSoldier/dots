@@ -1,48 +1,43 @@
 * {
     all: unset;
+    font-color: $fg;
 }
-
+$bg: #1F1F28;
+$dark-bg: #16161D;
+$fg: #DCD7BA;
+$dark-fg: #C8C093;
+$accent1: #223249;
 .bar {
     font-size: 10px;
-    font-family: "iosevka";
-    background-color: #1F1F28;
+    font-family: URW Bookman;
+    //font-family: JetBrainsMonoExtraBold Nerd Font Mono;
+    //font-family: Noto Color Emoji;
+    //font-family: Iosevka;
+    background-color: $bg;
     border-radius: 10px;
+    //border: 3px double #C8C093;
 }
 
-.metric scale trough highlight {
-  all: unset;
-	background-color: #2D4F67;
-  color: #000000;
-  border-radius: 10px;
+.graph {
 }
-.metric scale trough {
-  all: unset;
-  background-color: #C8C093;
-  border-radius: 50px;
-  min-height: 3px;
-  min-width: 50px;
-  margin-left: 10px;
-  margin-right: 20px;
+.graph-container {
 }
-.metric scale trough highlight {
-  all: unset;
-  background-color: #C8C093;
-  color: #000000;
-  border-radius: 10px;
+box.info {
+    color:#C8C093;
+    background-color: #16161D;
+    border-radius: 10px;
+    padding: 0px 1px;
+    margin: 1px;
 }
-.metric scale trough {
-  all: unset;
-  background-color: #4e4e4e;
-  border-radius: 50px;
-  min-height: 3px;
-  min-width: 50px;
-  margin-left: 10px;
-  margin-right: 20px;
+.info-icon {
+    //background-color: #16161D;
+    border-radius: 50%;
 }
+
 systray {
     margin-left: 10px;
 }
-button.workspace-entry {
+box.workspace-entry {
     background-color: #16161D;
 }
 
@@ -62,19 +57,24 @@ label.empty {
 }
 
 label.workspace-entry {
-    padding: 0px 0px;
     border-radius: 50%;
 }
 
-box.info {
-    background-color:#C8C093;
-    color: #16161D;
-    border-radius: 5px;
-    padding: 0px 6px;
-}
 
 .date {
-    background-color: #2D4F67;
+    background-color: $accent1;
+    //background-color: #2D4F67;
     border-radius: 5px;
+    padding: 5px 2px;
+}
+
+.time {
+    font-size: 15px;
+    font-family: URW Bookman;
+}
+
+.tray-container {
+    border-radius: 5px;
+    background-color: #D27E99;
     padding: 0px 6px;
 }
