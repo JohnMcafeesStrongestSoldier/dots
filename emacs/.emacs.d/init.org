@@ -299,6 +299,81 @@ I will use autocomplete with company
 #+begin_src emacs-lisp
   (global-set-key [f6] 'compile)
 #+end_src
+*** AI
+Some ai stuff, just for ollama
+#+begin_src emacs-lisp
+;;(use-package ellama
+;;  :bind ("C-c e" . ellama-transient-main-menu)
+;;  :init
+;;  ;; setup key bindings
+;;  ;; (setopt ellama-keymap-prefix "C-c e")
+;;  ;; language you want ellama to translate to
+;;  (setopt ellama-language "English")
+;;  ;; could be llm-openai for example
+;;  (require 'llm-ollama)
+;;  (setopt ellama-provider
+;;	    (make-llm-ollama
+;;	     ;; this model should be pulled to use it
+;;	     ;; value should be the same as you print in terminal during pull
+;;	     :chat-model "llama3.1:8b"
+;;	     :embedding-model "nomic-embed-text"
+;;	     :default-chat-non-standard-params '(("num_ctx" . 8192))))
+;;  (setopt ellama-summarization-provider
+;;	    (make-llm-ollama
+;;	     :chat-model "qwen2.5:3b"
+;;	     :embedding-model "nomic-embed-text"
+;;	     :default-chat-non-standard-params '(("num_ctx" . 32768))))
+;;  (setopt ellama-coding-provider
+;;	    (make-llm-ollama
+;;	     :chat-model "qwen2.5-coder:3b"
+;;	     :embedding-model "nomic-embed-text"
+;;	     :default-chat-non-standard-params '(("num_ctx" . 32768))))
+;;  ;; Predefined llm providers for interactive switching.
+;;  ;; You shouldn't add ollama providers here - it can be selected interactively
+;;  ;; without it. It is just example.
+;;  (setopt ellama-providers
+;;	    '(("zephyr" . (make-llm-ollama
+;;			   :chat-model "zephyr:7b-beta-q6_K"
+;;			   :embedding-model "zephyr:7b-beta-q6_K"))
+;;	      ("mistral" . (make-llm-ollama
+;;			    :chat-model "mistral:7b-instruct-v0.2-q6_K"
+;;			    :embedding-model "mistral:7b-instruct-v0.2-q6_K"))
+;;	      ("mixtral" . (make-llm-ollama
+;;			    :chat-model "mixtral:8x7b-instruct-v0.1-q3_K_M-4k"
+;;			    :embedding-model "mixtral:8x7b-instruct-v0.1-q3_K_M-4k"))))
+;;  ;; Naming new sessions with llm
+;;  (setopt ellama-naming-provider
+;;	    (make-llm-ollama
+;;	     :chat-model "tinyllama:1.1b"
+;;	     :embedding-model "nomic-embed-text"
+;;	     :default-chat-non-standard-params '(("stop" . ("\n")))))
+;;  (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
+;;  ;; Translation llm provider
+;;  (setopt ellama-translation-provider
+;;	  (make-llm-ollama
+;;	   :chat-model "qwen2.5:3b"
+;;	   :embedding-model "nomic-embed-text"
+;;	   :default-chat-non-standard-params
+;;	   '(("num_ctx" . 32768)))))
+#+end_src
+
+#+begin_src emacs-lisp
+   (use-package gptel
+     :config
+     (setq
+      gptel-model 'llama3.1:8b
+      gptel-backend (gptel-make-ollama "Ollama"
+		      :host "localhost:11434"
+		      :stream t
+		      :models '(llama3.1:8b)))
+  (setq gptel-max-tokens 2048)
+  (setq gptel-default-mode 'org-mode)
+  :bind
+  (("C-c o" . gptel-menu))
+  )
+#+end_src
+
+
 ** Smooth Scrolling
 I will use the sublimity smooth scrolling
 #+begin_src emacs-lisp

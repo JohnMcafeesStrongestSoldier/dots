@@ -1,12 +1,12 @@
-* {
-    all: unset;
-    font-color: $fg;
-}
 $bg: #1F1F28;
 $dark-bg: #16161D;
 $fg: #DCD7BA;
 $dark-fg: #C8C093;
 $accent1: #223249;
+* {
+    all: unset;
+    color: $fg;
+}
 .bar {
     font-size: 10px;
     font-family: URW Bookman;
