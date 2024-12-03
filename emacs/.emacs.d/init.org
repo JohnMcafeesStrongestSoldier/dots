@@ -301,6 +301,30 @@ I will use autocomplete with company
 #+end_src
 *** AI
 Some ai stuff, just for ollama
+** New gptel
+#+begin_src emacs-lisp
+   (use-package gptel
+   :config
+   (setq
+    gptel-model 'longllama:latest
+    gptel-backend (gptel-make-ollama "Ollama"
+	:host "localhost:11434"
+	:stream t
+	:models '(longllama:latest)))
+   (gptel-make-ollama "Ollama"             ;Any name of your choosing
+	:host "localhost:11434"               ;Where it's running
+	:stream t                             ;Stream responses
+	:models '(tinyllama:1.1b))  
+   (gptel-make-ollama "Ollama"             ;Any name of your choosing
+	:host "localhost:11434"               ;Where it's running
+	:stream t                             ;Stream responses
+	:models '(mistral-nemo:latest))  
+  (setq gptel-default-mode 'org-mode)
+  :bind
+  (("C-c o" . gptel-menu))
+  )
+#+end_src
+** Old ellama
 #+begin_src emacs-lisp
 ;;(use-package ellama
 ;;  :bind ("C-c e" . ellama-transient-main-menu)
@@ -356,23 +380,6 @@ Some ai stuff, just for ollama
 ;;	   :default-chat-non-standard-params
 ;;	   '(("num_ctx" . 32768)))))
 #+end_src
-
-#+begin_src emacs-lisp
-   (use-package gptel
-     :config
-     (setq
-      gptel-model 'llama3.1:8b
-      gptel-backend (gptel-make-ollama "Ollama"
-		      :host "localhost:11434"
-		      :stream t
-		      :models '(llama3.1:8b)))
-  (setq gptel-max-tokens 2048)
-  (setq gptel-default-mode 'org-mode)
-  :bind
-  (("C-c o" . gptel-menu))
-  )
-#+end_src
-
 
 ** Smooth Scrolling
 I will use the sublimity smooth scrolling
@@ -488,16 +495,23 @@ The wurst thing that i have ever had to set up
 #+begin_src emacs-lisp
   (define-key global-map "\C-cc" 'org-capture)
     (setq org-capture-templates '(
-	("t" "Task" entry (file+headline "~/org/notes.org" "Things to get done") "** TODO %?\n %i\n %a\n")
+	("j" "Journal file")
+	("jt" "Task" entry (file+olp "~/org/journal.org" "Daily") "** TODO %?\n %i\n %a\n")
+	("je" "Event" entry (file+datetree "~/org/journal.org" "Daily") "** %?\n %^\n %i\n %a\n")
 	("l" "Logging")
 	("lw" "Weight Entry" table-line (file+headline "~/org/notes.org" "Weight" ) "| %u | %^{weight|170lbs} | %^{phase|MainGain|Bulk|Cut} |")
 	("lr" "Run entry" table-line (file+headline "~/org/notes.org" "Runs") "| %u | %^{time} | %^{distance|10km|5km|1km} |")
 	("n" "Notes")
 	("nm" "Misc Notes" entry (file+headline "~/org/notes.org" "Misc") "*** %?\n %i\n %a\n")
-	("r" "Recipe" entry (file+headline "~/org/notes.org" "Recipes") "** %^{recipe-name} %^g \n [[%^{recipe-link}][recipe link]]\n - Ingredients \n  - %? \n- Instructions")
-
-				))
+	("r" "Recipe" entry (file+headline "~/org/notes.org" "Recipes") "** %^{recipe-name} %^g \n [[%^{recipe-link}][recipe link]]\n - Ingredients \n  - %? \n- Instructions"
+				)))
 #+end_src
+
+#+RESULTS:
+| j  | Journal file |       |                                                                                                      |            |
+| jt | Task         | entry | (file+olp ~/org/journal.org Daily `(format-time-string (car org-time-stamp-formats) (current-time))) | ** TODO %? |
+
+
 *** org-modern
 #+begin_src emacs-lisp
   (use-package org-modern
@@ -556,6 +570,7 @@ I used to use org roam but frankly not much anymore
 *** Various small changes to org behavior
 #+begin_src emacs-lisp
   (setq org-log-done 'time)
+  (setq org-log-into-drawer t)
 #+end_src
 ** Casual
 I probably wont use casual dired because of its difference from evil keybinds
