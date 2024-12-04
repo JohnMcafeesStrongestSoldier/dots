@@ -575,13 +575,15 @@ I used to use org roam but frankly not much anymore
 ** Casual
 I probably wont use casual dired because of its difference from evil keybinds
 #+begin_src emacs-lisp
-  (use-package casual
-    :config
-  (define-key calc-mode-map (kbd "C-o") 'casual-main-menu)
-    (evil-define-key 'normal calc-mode-map
-      (kbd "C-o") 'casual-main-menu)
-    )
+    (use-package casual
+      :config
+      (evil-define-key 'normal calc-mode-map
+	(kbd "C-o") 'casual-main-menu)
+    :bind ((:map calc-mode-map
+  ("C-o" . casual-main-menu)))
+      )
 #+end_src
+
 ** Misc
 *** Expand Region
 #+begin_src emacs-lisp
