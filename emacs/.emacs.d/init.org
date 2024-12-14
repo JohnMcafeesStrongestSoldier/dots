@@ -248,46 +248,114 @@ folding stuffs
 *** Pop-up terminal
 Shell pop + eat for a pop up terminal CURRENTLY BROKEN
 #+begin_src emacs-lisp
-  (use-package eat)
-  ;;;;(use-package shell-pop
-  ;;  :ensure t
-  ;;  :config
-  ;;  (add-hook 'shell-pop-in-hook (lambda () (push (cons "\\*eat*\\*" display-buffer--same-window-action) display-buffer-alist)))
-  ;;  :custom
-  ;;  (shell-pop-full-span t)
-  ;;  (shell-pop-universal-key "C-c t")
-  ;;  (shell-pop-term-shell "/bin/fish")
-  ;;  ;;(shell-pop-shell-type '("eat" "*eat*" (lambda () (eat shell-pop-term-shell))))
-  ;;  )
+    (use-package eat)
+    (use-package shell-pop
+      :ensure t
+      :config
+      ;;(add-hook 'shell-pop-in-hook (lambda () (push (cons "\\*eat*\\*" display-buffer--same-window-action) display-buffer-alist)))
+  (push (cons "\\*eat\\*" display-buffer--same-window-action) display-buffer-alist)
+      :custom
+      (shell-pop-full-span t)
+      (shell-pop-universal-key "C-c t")
+      (shell-pop-term-shell "/bin/fish")
+      (shell-pop-shell-type '("eat" "*eat*" (lambda nil (eat shell-pop-term-shell))))
+      )
 #+end_src
 *** Rainbow Mode
 #+begin_src emacs-lisp
   (use-package rainbow-mode
     :hook prog-mode)
 #+end_src
-*** Autocomplete
-I will use autocomplete with company
+*** Minibuffer addons
 #+begin_src emacs-lisp
-  (use-package company
-    :bind
-    (:map company-active-map
-	  ("C-n" . company-select-next)
-	  ("C-p" . company-select-previous))
-    :config
-    ;; Enable company mode in specific programming modes
-    (add-hook 'python-mode-hook 'company-mode)
-    (add-hook 'emacs-lisp-mode-hook 'company-mode)
-  (global-company-mode)
+  (use-package vertico
     :init
-    ;; Configure company-backends (backend for specific modes)
-    (setq company-backends
-	  '(company-capf   ; Completion-at-point functions (for language-specific support)
-	    company-dabbrev ; Basic dynamic abbreviation completion
-	    company-files   ; File path completion
-	    ))
-    :hook (prog-mode . company-mode)
-    :after
-    sly)
+    (vertico-mode))
+  (use-package marginalia
+    :init
+    (marginalia-mode))
+#+end_src
+*** Autocomplete
+I will use autocomplete with +company+ corfu, and cape
+#+begin_src emacs-lisp
+  (global-set-key [remap dabbrev-expand] 'hippie-expand)
+  (use-package corfu
+    ;; Optional customizations
+    :custom
+    (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+    (corfu-auto t)
+    (corfu-auto-delay 0.1)
+    (corfu-auto-prefix 1) 
+    (corfu-quit-at-boundary t)   ;; Never quit at completion boundary
+    (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+    (corfu-preview-current nil)    ;; Disable current candidate preview
+    (corfu-preselect 'first)      ;; Preselect the prompt
+    (corfu-on-exact-match nil)     ;; Configure handling of exact matches ma
+
+    ;; Enable Corfu only for certain modes. See also `global-corfu-modes'.
+    ;; :hook ((prog-mode . corfu-mode)
+    ;;        (shell-mode . corfu-mode)
+    ;;        (eshell-mode . corfu-mode))
+
+    ;; Recommended: Enable Corfu globally.  This is recommended since Dabbrev can
+    ;; be used globally (M-/).  See also the customization variable
+    ;; `global-corfu-modes' to exclude certain modes.
+    :init
+    (global-corfu-mode)
+    (corfu-history-mode))
+
+  (use-package corfu-terminal
+    :init
+    (unless (display-graphic-p)
+      (corfu-terminal-mode +1)))
+
+  ;; Add extensions
+  (use-package cape
+    ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
+    ;; Press C-c p ? to for help.
+    :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
+    ;; Alternatively bind Cape commands individually.
+    ;; :bind (("C-c p d" . cape-dabbrev)
+    ;;        ("C-c p h" . cape-history)
+    ;;        ("C-c p f" . cape-file)
+    ;;        ...)
+    :init
+    ;; Add to the global default value of `completion-at-point-functions' which is
+    ;; used by `completion-at-point'.  The order of the functions matters, the
+    ;; first function returning a result wins.  Note that the list of buffer-local
+    ;; completion functions takes precedence over the global list.
+    (defalias 'cape-dabbrev+dict
+      (cape-capf-super #'cape-keyword #'cape-dabbrev #'cape-dict))
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev+dict)
+    (add-hook 'completion-at-point-functions #'cape-file)
+    (add-hook 'completion-at-point-functions #'cape-history)
+    ;; ...
+    :config
+    (setq cape-dict-file "/home/james/Downloads/words.txt")
+  (setq ispell-personal-dictionary "en_CA")
+  (setq ispell-dictionary "en_CA")
+  (setq cape-dict-case-fold t)
+    )
+  ;; (use-package company
+  ;;   :bind
+  ;;   (:map company-active-map
+  ;;	  ("C-n" . company-select-next)
+  ;;	  ("C-p" . company-select-previous))
+  ;;   :config
+  ;;   ;; Enable company mode in specific programming modes
+  ;;   (add-hook 'python-mode-hook 'company-mode)
+  ;;   (add-hook 'emacs-lisp-mode-hook 'company-mode)
+  ;;   (global-company-mode)
+  ;;   :init
+  ;;   ;; Configure company-backends (backend for specific modes)
+  ;;   (setq company-backends
+  ;;	  '(company-capf   ; Completion-at-point functions (for language-specific support)
+  ;;	    company-dabbrev ; Basic dynamic abbreviation completion
+  ;;	    company-files   ; File path completion
+  ;;	    ))
+  ;;   :hook (prog-mode . company-mode)
+  ;;   :after
+  ;;   sly)
 #+end_src
 *** Rainbow Delimiters
 #+begin_src emacs-lisp
@@ -422,6 +490,7 @@ evil binds for org mode, I mostly just use this for the integration with org age
 *** Misc Evil things
 Misc evil things, like evil-surround
 #+begin_src emacs-lisp
+  (use-package evil-numbers)
   (use-package evil-surround
     :config
     (global-evil-surround-mode 1))
@@ -444,13 +513,13 @@ for a time I will be trying lsp mode but may switch to eglot
 	   ;; if you want which-key integration
 	   /e	   (lsp-mode . lsp-enable-which-key-integration))
     :commands lsp)
-
-  ;; optionally
-  (use-package lsp-ui :commands lsp-ui-mode)
-  ;; if you are helm user
-  (use-package helm-lsp :commands helm-lsp-workspace-symbol)
-  ;; if you are ivy user
-  (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+;;
+;;  ;; optionally
+;;  ;;(use-package lsp-ui :commands lsp-ui-mode)
+;;  ;; if you are helm user
+;;  ;;(use-package helm-lsp :commands helm-lsp-workspace-symbol)
+;;  ;; if you are ivy user
+;;  ;;(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
   (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 
   ;; optionally if you want to use debugger
